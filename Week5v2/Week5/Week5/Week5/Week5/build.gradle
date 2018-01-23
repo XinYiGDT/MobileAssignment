@@ -4,6 +4,7 @@ buildscript {
     repositories {
         mavenCentral() //Build Scripts w user of API from FB SDK
         jcenter()
+        //TODO
         //google()
     }
     dependencies {
@@ -17,6 +18,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        //TODO
        // google()
     }
 }
