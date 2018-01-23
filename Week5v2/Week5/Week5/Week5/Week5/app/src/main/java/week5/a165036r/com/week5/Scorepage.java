@@ -3,6 +3,8 @@ package week5.a165036r.com.week5;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.content.Intent;
@@ -23,6 +25,9 @@ import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
+import com.facebook.share.ShareApi;
+import com.facebook.share.model.SharePhoto;
+import com.facebook.share.model.SharePhotoContent;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,13 +50,12 @@ public class Scorepage extends Activity implements OnClickListener {
 
     ProfilePictureView _profile_pic;
 
-    int highscore =0;
+    int highscore = 0;
 
     List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -72,17 +76,14 @@ public class Scorepage extends Activity implements OnClickListener {
         _profile_pic = (ProfilePictureView) findViewById(R.id.picture);
         _callbackManager = CallbackManager.Factory.create();
 
-        AccessTokenTracker _accesstokentracker = new AccessTokenTracker()
-        {
+        //highscore= GameSystem.Instance.GetTntFromSave("Score"):
+
+        AccessTokenTracker _accesstokentracker = new AccessTokenTracker() {
             @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currAccessToken)
-            {
-                if(currentAccessToken == null)
-                {
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                if (currentAccessToken == null) {
                     _profile_pic.setProfileId(" ");
-                }
-                else
-                {
+                } else {
                     _profile_pic.setProfileId(Profile.getCurrentProfile().getId());
                 }
             }
@@ -115,28 +116,24 @@ public class Scorepage extends Activity implements OnClickListener {
     @Override
     public void onClick(View v) {
         Intent _intent = new Intent();
-        if(v == btn_back)
-        {
+        if (v == btn_back) {
             _intent.setClass(this, MainMenu.class);
             startActivity(_intent);
-        }
-        else if(v == btn_sharescore)
-        {
+        } else if (v == btn_sharescore) {
             AlertDialog.Builder _alertBuilder = new AlertDialog.Builder(Scorepage.this);
             _alertBuilder.setTitle("Share on Facebook?");
             _alertBuilder.setMessage("Do you want to share on Facebook?");
             _alertBuilder.setCancelable(false);
-            _alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+            _alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
+                public void onClick(DialogInterface dialog, int which) {
                     //call method to score
+                    shareScore();
                 }
             });
-            _alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+            _alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
+                public void onClick(DialogInterface dialog, int which) {
                     //dialog cancel
                     dialog.cancel();
                 }
@@ -144,4 +141,30 @@ public class Scorepage extends Activity implements OnClickListener {
             _alertBuilder.show();
         }
     }
+
+    public void shareScore() {
+        Bitmap _image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+
+        SharePhoto _photo = new SharePhoto.Builder().setBitmap(_image).setCaption("Thank you for playing XX! Your highscore is " + highscore).build();
+
+        SharePhotoContent _content = new SharePhotoContent.Builder().addPhoto(_photo).build();
+
+        ShareApi.share(_content, null);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        _callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected void onPause() {
+        super.onPause();
+    }
+
+    protected void onDestory() {
+        super.onDestroy();
+    }
+
+
 }
