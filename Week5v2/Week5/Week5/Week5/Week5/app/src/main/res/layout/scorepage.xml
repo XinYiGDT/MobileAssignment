@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <com.facebook.login.widget.LoginButton
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fb_login_button"/>
+
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:background="@drawable/back"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="29dp"
+        android:layout_marginBottom="21dp"
+        />
+
+    <Button
+        android:id="@+id/btn_sharescore"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/fbicon"
+        android:layout_marginStart="12dp"
+        android:layout_centerVertical="true"
+        android:layout_alignStart="@+id/btn_back" />
+
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/picture"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_alignBottom="@+id/btn_sharescore"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="31dp">
+
+    </com.facebook.login.widget.ProfilePictureView>
+
+</RelativeLayout>
