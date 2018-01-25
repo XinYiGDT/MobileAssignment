@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.content.Intent;
 
 public class PauseConfirmDialogFragment extends DialogFragment
 {
@@ -13,14 +14,16 @@ public class PauseConfirmDialogFragment extends DialogFragment
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         IsShown = true;
-
+        GameSystem.Instance.setIsPaused(true);
         //TODO
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Confirm Pause").setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage("Return to Main Menu?").setPositiveButton("Yes", new DialogInterface.OnClickListener(){
            @Override
             public void onClick(DialogInterface dialog, int which)
            {
-               GameSystem.Instance.setIsPaused(GameSystem.Instance.getIsPaused());
+               getActivity().finish();
+               Intent intent = new Intent(builder.getContext(),MainMenu.class);
+               builder.getContext().startActivity(intent);
                IsShown = false;
            }
         }).setNegativeButton("No", new DialogInterface.OnClickListener()
@@ -29,7 +32,7 @@ public class PauseConfirmDialogFragment extends DialogFragment
             public void onClick(DialogInterface dialog, int which)
             {
                 //TODO
-                GameSystem.Instance.setIsPaused(!GameSystem.Instance.getIsPaused());
+                GameSystem.Instance.setIsPaused(false);
                 IsShown = false;
             }
         });

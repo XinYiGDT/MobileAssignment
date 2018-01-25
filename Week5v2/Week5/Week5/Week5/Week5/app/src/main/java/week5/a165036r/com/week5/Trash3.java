@@ -111,7 +111,7 @@ public class Trash3 implements EntityBase , Collidable
 
     @Override
     public boolean IsInit() {
-        return false;
+        return bmp!=null;
     }
 
     @Override

@@ -37,7 +37,7 @@ public class GameSystem
 
         sharedPref = gamepage.Instance.getSharedPreferences(SHARED_PREF_ID,0);
 
-       StateManager.Instance.AddState(new IntroState());
+        StateManager.Instance.AddState(new IntroState());
         StateManager.Instance.AddState(new MainGameState());
     }
 

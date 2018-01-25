@@ -41,7 +41,7 @@ public class SamplePauseButton implements EntityBase
             if (Collision.SpheretoSphere(TouchManager.Instance.GetPosX(), TouchManager.Instance.GetPosY(), 0.0f, xPos, yPos, imgRadius))
             {
                 // Button clicked!
-                GameSystem.Instance.setIsPaused(!GameSystem.Instance.getIsPaused());
+
                 isPressed = true;
 
                 if(PauseConfirmDialogFragment.IsShown)
@@ -88,3 +88,4 @@ public class SamplePauseButton implements EntityBase
         return result;
     }
 }
+

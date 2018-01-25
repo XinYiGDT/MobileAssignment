@@ -91,7 +91,7 @@ public class binGeneral implements EntityBase, Collidable
 
     @Override
     public boolean IsInit() {
-        return false;
+        return bmp!=null;
     }
 
     @Override

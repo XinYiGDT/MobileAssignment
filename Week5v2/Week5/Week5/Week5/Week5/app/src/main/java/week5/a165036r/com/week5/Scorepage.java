@@ -2,16 +2,24 @@ package week5.a165036r.com.week5;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
+import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -19,38 +27,38 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.facebook.share.ShareApi;
+import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.util.Arrays;
 import java.util.List;
 
 
 
-/**
- * Created by 163935T on 1/23/2018.
- */
-
-public class Scorepage extends Activity implements OnClickListener {
+public class Scorepage extends Activity implements OnClickListener{
 
     private Button btn_back;
+
+    int highscore = 0;
+
+    // Facebook UI
     private Button btn_fbLogin;
     private Button btn_sharescore;
 
     boolean loggedin = false;
-    private CallbackManager _callbackManager;
-    private LoginManager _loginmanager;
+    private CallbackManager callbackManager;
+    private LoginManager loginManager;
 
-    ProfilePictureView _profile_pic;
-
-    int highscore = 0;
+    ProfilePictureView profile_pic;
 
     List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
@@ -58,113 +66,151 @@ public class Scorepage extends Activity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);// hide title
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //hide top bar
 
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        FacebookSdk.sdkInitalize(this.getApplicationContext());
-        setContent.View(R.layout.scorepage);
+        // Initalize for FB
+        FacebookSdk.setApplicationId("148602315800459");
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
+        //AppEventsLogger.activateApp(this);
 
-        btn_back = (Button) findViewById(R.id.btn_start);
+        setContentView(R.layout.scorepage);
+
+        highscore =  GameSystem.Instance.GetIntFromSave("Score");
+
+        // Define for back button
+        btn_back = (Button) findViewById(R.id.btn_back);
         btn_back.setOnClickListener(this);
 
-        btn_fbLogin = (Button) findViewById(R.id.fb_login_button);
+        // Define fb button
+        btn_fbLogin = (LoginButton) findViewById(R.id.fb_login_button);
         btn_fbLogin.setOnClickListener(this);
 
+        // Define scoreshare button
         btn_sharescore = (Button) findViewById(R.id.btn_sharescore);
         btn_sharescore.setOnClickListener(this);
 
-        _profile_pic = (ProfilePictureView) findViewById(R.id.picture);
-        _callbackManager = CallbackManager.Factory.create();
+        profile_pic = (ProfilePictureView)findViewById(R.id.picture);
+        callbackManager = CallbackManager.Factory.create();
 
-        //highscore= GameSystem.Instance.GetTntFromSave("Score"):
+        AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
 
-        AccessTokenTracker _accesstokentracker = new AccessTokenTracker() {
             @Override
-            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-                if (currentAccessToken == null) {
-                    _profile_pic.setProfileId(" ");
-                } else {
-                    _profile_pic.setProfileId(Profile.getCurrentProfile().getId());
+            protected void onCurrentAccessTokenChanged(
+                    AccessToken oldAccessToken,
+                    AccessToken currentAccessToken) {
+
+                if (currentAccessToken == null){
+                    //User logged out
+                    profile_pic.setProfileId("");
+                }
+                else{
+
+                    profile_pic.setProfileId(Profile.getCurrentProfile().getId());
                 }
             }
         };
-        _accesstokentracker.startTracking();
 
-        _loginmanager = LoginManager.getInstance();
-        _loginmanager.logInWithPublishPermissions(this, PERMISSIONS);
+        accessTokenTracker.startTracking();
 
-        _loginmanager.registerCallback(_callbackManager, new FacebookCallback<LoginResult>() {
+        loginManager = LoginManager.getInstance();
+        loginManager.logInWithPublishPermissions(this, PERMISSIONS);
+
+        loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                _profile_pic.setProfileId(Profile.getCurrentProfile().getId());
-                //call method to share score
+                profile_pic.setProfileId(Profile.getCurrentProfile().getId());
+                shareScore();
             }
-
             @Override
             public void onCancel() {
-                System.out.println("Login attempt cancelled");
-                //or print text on your screen using paint()
+                System.out.println("Login attempt canceled.");
             }
 
             @Override
-            public void onError(FacebookException error) {
-                System.out.println("Login attempt failed");
+            public void onError(FacebookException e) {
+                System.out.println("Login attempt failed.");
             }
         });
+
     }
+
+
 
     @Override
     public void onClick(View v) {
-        Intent _intent = new Intent();
+
+        Intent intent = new Intent();
         if (v == btn_back) {
-            _intent.setClass(this, MainMenu.class);
-            startActivity(_intent);
-        } else if (v == btn_sharescore) {
-            AlertDialog.Builder _alertBuilder = new AlertDialog.Builder(Scorepage.this);
-            _alertBuilder.setTitle("Share on Facebook?");
-            _alertBuilder.setMessage("Do you want to share on Facebook?");
-            _alertBuilder.setCancelable(false);
-            _alertBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //call method to score
-                    shareScore();
-                }
-            });
-            _alertBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //dialog cancel
-                    dialog.cancel();
-                }
-            });
-            _alertBuilder.show();
+            intent.setClass(this, MainMenu.class);
+            startActivity(intent);
         }
+
+        else if(v == btn_sharescore ) {
+
+            AlertDialog.Builder alert_builder = new AlertDialog.Builder(Scorepage.this);
+
+            alert_builder.setTitle("Share score on facebook");
+            alert_builder.setMessage("Do you want to share your score of " + String.valueOf(highscore))
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            shareScore();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+
+            alert_builder.show();
+
+        }
+
     }
 
-    public void shareScore() {
-        Bitmap _image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round);
+    // To share info on FB
+    public void shareScore(){
 
-        SharePhoto _photo = new SharePhoto.Builder().setBitmap(_image).setCaption("Thank you for playing XX! Your highscore is " + highscore).build();
+        Bitmap image = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
 
-        SharePhotoContent _content = new SharePhotoContent.Builder().addPhoto(_photo).build();
 
-        ShareApi.share(_content, null);
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(image)
+                .setCaption("Thank you for playing MGP2017. Your final score is " + highscore)
+                .build();
+
+        SharePhotoContent content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+
+        ShareApi.share(content, null);
     }
 
+    // FB to use the callback Manager to manage login
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        _callbackManager.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    protected void onPause() {
+    protected void onPause(){
         super.onPause();
     }
 
-    protected void onDestory() {
+    @Override
+    protected void onDestroy() {
+        //finish();
         super.onDestroy();
     }
 
-
+    @Override
+    protected void onStop() {
+        //finish();
+        super.onStop();
+    }
 }

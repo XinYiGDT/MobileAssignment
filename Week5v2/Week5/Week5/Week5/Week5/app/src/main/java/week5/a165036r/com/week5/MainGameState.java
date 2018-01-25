@@ -5,7 +5,7 @@ import android.view.SurfaceView;
 
 public class MainGameState implements StateBase
 {
-    public final static MainGameState Instance = new MainGameState();
+    //public final static MainGameState Instance = new MainGameState();
     float Timer = 0.0f;
     boolean binCanOnce = true;
     boolean binPlasticOnce = true;
@@ -72,5 +72,10 @@ public class MainGameState implements StateBase
     @Override
     public void OnExit() {
 
+        Timer = 0.0f;
+        binCanOnce = true;
+        binPlasticOnce = true;
+        binGeneralOnce = true;
+        pause  = false;
     }
 }

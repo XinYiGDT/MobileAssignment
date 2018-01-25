@@ -99,7 +99,8 @@ public class EntityManager
         // Render all entities here
         for (EntityBase currEntity : entityList)
         {
-            currEntity.Render(_canvas);
+            if(currEntity.IsInit())
+                currEntity.Render(_canvas);
         }
     }
 
