@@ -13,7 +13,6 @@ public class SampleBackGround implements EntityBase
     private float xPos,yPos,offset;
     private SurfaceView view = null;
     private int renderLayer = 0;
-
     int ScreenWidth, ScreenHeight;
     private Bitmap scaledbmp = null;
     @Override

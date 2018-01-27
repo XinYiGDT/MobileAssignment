@@ -9,10 +9,14 @@ import java.util.Random;
 
 public class binCan implements EntityBase , Collidable
 {
+
     private Bitmap bmp = null;
     private boolean isDone = false;
     private float xPos,yPos,xDir,yDir,lifeTime, movementSpeed, ranPos;
     private Sprite spritesheet = null;
+    public Vector3 Pos = new Vector3();
+    public Vector3 Vel = new Vector3();
+
 
     @Override
     public boolean IsDone()
@@ -39,7 +43,6 @@ public class binCan implements EntityBase , Collidable
         ranPos = ranGen.nextInt(2)+1;
        // xPos = 1000.f;//ranGen.nextFloat()* _view.getWidth();
        // xDir = -1.f;//ranGen.nextFloat()*-1.0f+1.0f;//ranGen.nextFloat()*100.0f - 50.0f;
-
         yPos = 700.f;
         yDir = 0;
 
@@ -68,20 +71,7 @@ public class binCan implements EntityBase , Collidable
         xPos += xDir*_dt*movementSpeed;
 
         spritesheet.Update(_dt);
-        //yPos +=yDir*_dt;
 
-
-        //if user click on the object, remove the object (it dies)
-        //if(android.getTouch.... etc)
-        //handle the touch and check collision with click/touch
-        /*if(TouchManager.Instance.IsDown())
-        {
-            float imgRadius = bmp.getHeight() * 0.5f;
-            if(Collision.SphereToSphere(TouchManager.Instance.GetPosX(),TouchManager.Instance.GetPosY(),0.0f,xPos,yPos,imgRadius))
-            {
-                SetIsDone(true);
-            }
-        }*/
     }
 
     @Override
