@@ -21,13 +21,14 @@ public class MainGameState implements StateBase
     public void OnEnter(SurfaceView _view)
     {
         EntityManager.Instance.init(_view);
+        TouchManager.Instance.init();
         SampleBackGround.Create();
 
         SamplePauseButton.Create();
         Trash1.Create();
-        trash2.Create();
-        Trash3.Create();
-
+       // trash2.Create();
+       // Trash3.Create();
+        binPlastic.Create();
         AudioManager.Instance.PlayAudio((R.raw.fliesbuzzing));
     }
 
@@ -37,26 +38,48 @@ public class MainGameState implements StateBase
 
         if(!GameSystem.Instance.getIsPaused()) {
 
-            if (Timer > 3.0f && binCanOnce) {
-                //SampleEntity.Create();
-                binCan.Create();
-                binCanOnce = false;
-                binPlasticOnce = true;
-                //timer = 0.0f;
-            } else if (Timer > 6.0f && binPlasticOnce) {
-                //SampleEntity.Create();
-                binPlastic.Create();
-                binPlasticOnce = false;
-                binGeneralOnce = true;
-                //timer = 0.0f;
-            } else if (Timer > 9.0f && binGeneralOnce) {
-                //SampleEntity.Create();
-                binGeneral.Create();
-                binGeneralOnce = false;
-                binCanOnce = true;
-                Timer = 0.0f;
+            if(Timer> 3 )
+            {
+                //binPlastic.Create();
+                Timer = 0;
             }
+
+
+//            if (Timer > 3.0f && binCanOnce) {
+//                //SampleEntity.Create();
+//                binCan.Create();
+//                binCanOnce = false;
+//                binPlasticOnce = true;
+//                //timer = 0.0f;
+//            } else if (Timer > 6.0f && binPlasticOnce) {
+//                //SampleEntity.Create();
+//                binPlastic.Create();
+//                binPlasticOnce = false;
+//                binGeneralOnce = true;
+//                //timer = 0.0f;
+//            } else if (Timer > 9.0f && binGeneralOnce) {
+//                //SampleEntity.Create();
+//                binGeneral.Create();
+//                binGeneralOnce = false;
+//                binCanOnce = true;
+//                Timer = 0.0f;
+//            }
             EntityManager.Instance.Update(_dt);
+
+            if( TouchManager.Instance.IsDown() && TouchManager.Instance.touchCount == 0 && !TouchManager.Instance.objectAttached)
+            {
+                //System.out.println("hit");
+                TouchManager.Instance.touchCount = 1;
+                TouchManager.Instance.goForward = true;
+                TouchManager.Instance.isChanging = true;
+            }
+
+            else if(TouchManager.Instance.isUp() && TouchManager.Instance.touchCount == 1)
+            {
+                TouchManager.Instance.touchCount = 0;
+            }
+
+
         }
         else
         {

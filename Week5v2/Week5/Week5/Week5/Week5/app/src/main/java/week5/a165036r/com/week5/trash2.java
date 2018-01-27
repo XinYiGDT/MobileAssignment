@@ -13,13 +13,20 @@ import java.util.Random;
 public class trash2 implements EntityBase , Collidable
 {
     private Bitmap bmp = null;
+    private Bitmap ScaledBmp = null;
     private boolean isDone = false;
-    private float xPos,yPos,xDir,yDir,lifeTime;
     private boolean isTouched = false;
-    private boolean TouchedTrash = false;
-
+    public Vector3 Pos = new Vector3(0,0,0);
+    public Vector3 Vel = new Vector3(0,0,0);
+    public Vector3 ghostPos = new Vector3(0,0,0);
+    private float scaleX,scaleY;
+    private float gravity = 0;
+    private boolean released = false;
     //vibration for feedback
     private Vibrator _vibrator;
+    private int uiPos = 0;
+    private float speed = 3;
+
 
     @Override
     public boolean IsDone()
@@ -34,17 +41,15 @@ public class trash2 implements EntityBase , Collidable
 
     @Override
     public void Init(SurfaceView _view) {
-        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.paper);
-        lifeTime = 5.0f;
-        Random randGen = new Random();
-        xPos = 600;
-        yPos = 1550;
-        //TouchedTrash = false;
-        //xPos = 500;
-        //yPos =500;
+
+        scaleX = scaleY = 1;
+        bmp = ResourceManager.Instance.GetBitmap(R.drawable.paper);
+        ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
+        //uiPos = 0;
+        Pos.set(TouchManager.Instance.Place[uiPos].x,TouchManager.Instance.Place[uiPos].y,0);
+        gravity =100.f;
+
         TouchManager.Instance.objectAttached = false;
-        //xDir = randGen.nextFloat() * 100.0f -50.0f;
-        //yDir = randGen.nextFloat() * 100.0f - 50.0f;
 
         //If user click on object, object dies
         _vibrator = (Vibrator)_view.getContext().getSystemService (_view.getContext().VIBRATOR_SERVICE);
@@ -63,50 +68,124 @@ public class trash2 implements EntityBase , Collidable
 
     @Override
     public void Update(float _dt) {
-        //lifeTime -= _dt;
-        // if(lifeTime <=0)
-        //setIsDone(true);
 
-        //xPos += 2*_dt;
-       // TouchedTrash =false;
-        if(isTouched )
+        if(TouchManager.Instance.isChanging)
         {
-            xPos = TouchManager.Instance.GetPosX();
-            yPos = TouchManager.Instance.GetPosY();
+            Vector3 Target = new Vector3(0,0,0);
+            if(TouchManager.Instance.goForward) {
+
+                if (uiPos == 2) {
+
+                    uiPos = 0;
+                    TouchManager.Instance.goForward = false;
+                }
+                else
+                {
+                    uiPos++;
+                    TouchManager.Instance.goForward = false;
+                }
+
+            }
+            System.out.println(uiPos);
+
+            Target.x = TouchManager.Instance.Place[uiPos].x - Pos.x;
+            Target.y = TouchManager.Instance.Place[uiPos].y - Pos.y;
+
+
+            Pos.x += Target.x * _dt * 3;
+            Pos.y += Target.y * _dt * 3;
+
+            // System.out.println(Pos.distance2(TouchManager.Instance.Place[uiPos]));
+            if(Pos.distance2(TouchManager.Instance.Place[uiPos])/10 < 100)
+            {
+
+                TouchManager.Instance.isChanging = false;
+            }
         }
 
-        if( TouchManager.Instance.HasTouch() && !TouchManager.Instance.objectAttached )
+
+        if(isTouched )
+        {
+
+            // Pos.x = TouchManager.Instance.GetPosX();
+
+            Pos.y = TouchManager.Instance.GetPosY();
+
+        }
+
+
+        if( TouchManager.Instance.HasTouch()&& !TouchManager.Instance.objectAttached && !released)
         {
             //Check Collision
             float imageRadius = bmp.getHeight() * 0.5f;
-            if(Collision.SpheretoSphere(TouchManager.Instance.GetPosX(),TouchManager.Instance.GetPosY(),0.0f,xPos,yPos,imageRadius))
+            if(Collision.SpheretoSphere(TouchManager.Instance.GetPosX(),TouchManager.Instance.GetPosY(),0.0f,Pos.x,Pos.y,imageRadius) && uiPos ==1)
             {
+                //Pos.x = TouchManager.Instance.GetPosX();
+
+                ghostPos.x = TouchManager.Instance.GetPosX();
+                ghostPos.y = TouchManager.Instance.GetPosY();
+                Vel.set(0,0,0);
                 isTouched = true;
                 TouchManager.Instance.objectAttached = true;
-                //xPos = TouchManager.Instance.GetPosX();
-                //yPos = TouchManager.Instance.GetPosY();
-                // setIsDone(true);
             }
 
         }
 
-        else if(TouchManager.Instance.isUp())
+        if(Vel.x !=0 || Vel.y!=0 )
         {
-            TouchManager.Instance.objectAttached = false;
-            isTouched = false;
-            xPos = 600;
-            yPos = 1550;
+            Vel.y += gravity *_dt *8.f;
+            Pos.x += Vel.x *_dt * 6;
+            Pos.y += Vel.y *_dt *6;
+            scaleX -= 0.4f*_dt;
+            scaleY -= 0.4f*_dt;
+            if(scaleX <= 0.7f &&scaleY <= 0.7f)
+            {
+
+                scaleX = scaleY = 0.6f;
+            }
+
+
+            ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
+
+            // System.out.println(Vel.y);
+            //System.out.println( scaleX);
 
         }
 
 
+        else if(TouchManager.Instance.isUp())
+        {
+            //TouchManager.Instance.objectAttached = false;
+
+            if(isTouched)
+            {
+                Vel.x = ghostPos.x - Pos.x;
+                Vel.y = ghostPos.y - Pos.y;
+                released = true;
+                //Vel.y += gravity *_dt *1;
+            }
+
+            isTouched = false;
+        }
+
+        if(Pos.x <=0 || Pos.y > 2000 || Pos.x < 40 || Pos.y < -100)
+        {
+            Pos.set( TouchManager.Instance.Place[uiPos].x, TouchManager.Instance.Place[uiPos].y,0);
+            Vel.set(0,0,0);
+            scaleX = 1;
+            scaleY = 1;
+            ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
+            TouchManager.Instance.objectAttached = false;
+            released = false;
+            TouchManager.Instance.objectAttached = false;
+        }
     }
 
     @Override
     public void Render(Canvas _canvas) {
         // _canvas.scale(0.8f,0.8f);
-        _canvas.drawBitmap(bmp,xPos - bmp.getWidth() * 0.5f,yPos - bmp.getHeight() * 0.5f,null);
-
+        //_canvas.drawBitmap(bmp,Pos.x - bmp.getWidth() * 0.4f,Pos.y - bmp.getHeight() * 0.4f,null);
+        _canvas.drawBitmap(ScaledBmp,Pos.x - ScaledBmp.getWidth()*0.5f,Pos.y-ScaledBmp.getHeight() *0.5f,null);
     }
 
     @Override
@@ -138,11 +217,11 @@ public class trash2 implements EntityBase , Collidable
 
     @Override
     public float GetPosX() {
-        return xPos;
+        return Pos.x;
     }
 
     @Override
-    public float GetPosY() {return yPos;}
+    public float GetPosY() {return Pos.y;}
 
     @Override
     public float GetRadius() {
@@ -151,10 +230,17 @@ public class trash2 implements EntityBase , Collidable
 
     @Override
     public void OnHit(Collidable _other) {
-        if(_other.GetType() == "binGeneral" ) {
+        if(_other.GetType() == "binPlastic" && scaleX <= 0.7f ) {
             //TouchManager.Instance.objectAttached = false;
-            xPos = 600;
-            yPos = 1550;
+            Pos.set( TouchManager.Instance.Place[uiPos].x, TouchManager.Instance.Place[uiPos].y,0);
+            Vel.set(0,0,0);
+            scaleX = 1;
+            scaleY = 1;
+            ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
+            TouchManager.Instance.objectAttached = false;
+            released = false;
+            TouchManager.Instance.objectAttached = false;
+            System.out.println("hit");
             // setIsDone(true);
 
             //add score
@@ -165,6 +251,7 @@ public class trash2 implements EntityBase , Collidable
             GameSystem.Instance.SaveEditEnd();
 
             startVibrate();
+
             AudioManager.Instance.PlayAudio(R.raw.eating1);
         }
         else

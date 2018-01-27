@@ -6,6 +6,10 @@ import android.view.SurfaceView;
 //Every entity must implement this
 public interface EntityBase
 {
+    Vector3 Uipos1 = new Vector3(220,1550,0);
+    Vector3 Uipos2 = new Vector3(500,1000,0);
+    Vector3 Uipos3 = new Vector3(900,1550,0);
+
     boolean IsDone();
     void setIsDone(boolean _isDone);
 
@@ -19,4 +23,5 @@ public interface EntityBase
     int GetRenderLayer();
 
     void SetRenderLayer(int _newLayer);
+
 }

@@ -42,16 +42,18 @@ public class binPlastic implements EntityBase, Collidable
         yPos = 700.f;
         yDir = 0;
 
-        if(ranPos ==1)
-        {
-            xPos = 10.f;
-            xDir = 1.0f;
-        }
-        else
-        {
-            xPos = 1000.f;
-            xDir = -1.0f;
-        }
+        xPos = 550;
+
+//        if(ranPos ==1)
+//        {
+//            xPos = 10.f;
+//            xDir = 1.0f;
+//        }
+//        else
+//        {
+//            xPos = 1000.f;
+//            xDir = -1.0f;
+//        }
 
 
         movementSpeed =100.f;
@@ -61,14 +63,14 @@ public class binPlastic implements EntityBase, Collidable
     public void Update(float _dt)
     {
         lifeTime -=_dt;
-        if(lifeTime <=0.0f)
-        {
-
-            setIsDone(true);
-        }
-
-        xPos += xDir*_dt*movementSpeed;
-        spritesheet.Update(_dt);
+//        if(lifeTime <=0.0f)
+//        {
+//
+//            setIsDone(true);
+//        }
+//
+//        xPos += xDir*_dt*movementSpeed;
+        //spritesheet.Update(_dt);
         //yPos +=yDir*_dt;
 
         //if user click on the object, remove the object (it dies)

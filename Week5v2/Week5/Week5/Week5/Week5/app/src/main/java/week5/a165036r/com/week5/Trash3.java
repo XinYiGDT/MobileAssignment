@@ -153,8 +153,6 @@ public class Trash3 implements EntityBase , Collidable
     public void OnHit(Collidable _other) {
         if(_other.GetType() == "binCan" ) {
             //TouchManager.Instance.objectAttached = false;
-            xPos = 900;
-            yPos = 1550;
             // setIsDone(true);
 
             //add score
