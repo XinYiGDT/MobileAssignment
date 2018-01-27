@@ -38,32 +38,32 @@ public class MainGameState implements StateBase
 
         if(!GameSystem.Instance.getIsPaused()) {
 
-            if(Timer> 3 )
-            {
+           // if(Timer> 3 )
+           // {
                 //binPlastic.Create();
-                Timer = 0;
+          //      Timer = 0;
+          //  }
+
+
+           if (Timer > 3.0f && binCanOnce) {
+                //SampleEntity.Create();
+                binCan.Create();
+                binCanOnce = false;
+                binPlasticOnce = true;
+                //timer = 0.0f;
+            } else if (Timer > 12.0f && binPlasticOnce) {
+                //SampleEntity.Create();
+                binPlastic.Create();
+                binPlasticOnce = false;
+                binGeneralOnce = true;
+                //timer = 0.0f;
+            } else if (Timer > 18.0f && binGeneralOnce) {
+                //SampleEntity.Create();
+               // binGeneral.Create();
+                binGeneralOnce = false;
+                binCanOnce = true;
+                Timer = 0.0f;
             }
-
-
-//            if (Timer > 3.0f && binCanOnce) {
-//                //SampleEntity.Create();
-//                binCan.Create();
-//                binCanOnce = false;
-//                binPlasticOnce = true;
-//                //timer = 0.0f;
-//            } else if (Timer > 6.0f && binPlasticOnce) {
-//                //SampleEntity.Create();
-//                binPlastic.Create();
-//                binPlasticOnce = false;
-//                binGeneralOnce = true;
-//                //timer = 0.0f;
-//            } else if (Timer > 9.0f && binGeneralOnce) {
-//                //SampleEntity.Create();
-//                binGeneral.Create();
-//                binGeneralOnce = false;
-//                binCanOnce = true;
-//                Timer = 0.0f;
-//            }
             EntityManager.Instance.Update(_dt);
 
             if( TouchManager.Instance.IsDown() && TouchManager.Instance.touchCount == 0 && !TouchManager.Instance.objectAttached)

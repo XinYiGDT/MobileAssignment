@@ -13,9 +13,6 @@ public class GameSystem
     SharedPreferences.Editor editor = null;
 
     float Timer = 0.0f;
-    boolean binCanOnce = true;
-    boolean binPlasticOnce = true;
-    boolean binGeneralOnce = true;
     boolean pause  = false;
     private GameSystem()
     {

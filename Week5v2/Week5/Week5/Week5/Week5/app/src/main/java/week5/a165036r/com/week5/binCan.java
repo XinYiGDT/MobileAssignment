@@ -35,7 +35,7 @@ public class binCan implements EntityBase , Collidable
     public void Init(SurfaceView _view)
     {
         bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin01_anim);
-        lifeTime = 3.0f;
+        lifeTime = 8.0f;
         Random ranGen = new Random();
 
         spritesheet = new Sprite(ResourceManager.Instance.GetBitmap(R.drawable.bin01_anim), 1, 4, 5);
@@ -57,7 +57,7 @@ public class binCan implements EntityBase , Collidable
             xDir = -1.0f;
         }
 
-        movementSpeed =100.f;
+        movementSpeed =150.f;
     }
 
     @Override

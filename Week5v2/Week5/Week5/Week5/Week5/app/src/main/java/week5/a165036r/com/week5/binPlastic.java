@@ -32,7 +32,7 @@ public class binPlastic implements EntityBase, Collidable
     public void Init(SurfaceView _view)
     {
         bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin02_anim);
-        lifeTime = 3.0f;
+        lifeTime = 8.0f;
         Random ranGen = new Random();
         spritesheet = new Sprite(ResourceManager.Instance.GetBitmap(R.drawable.bin02_anim), 1, 4, 5);
 
@@ -56,7 +56,7 @@ public class binPlastic implements EntityBase, Collidable
 //        }
 
 
-        movementSpeed =100.f;
+        movementSpeed =150.f;
     }
 
     @Override
