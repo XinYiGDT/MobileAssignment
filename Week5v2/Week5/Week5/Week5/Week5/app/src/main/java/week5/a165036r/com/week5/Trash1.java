@@ -303,6 +303,7 @@ public class Trash1 implements EntityBase , Collidable
           else
           {
               AudioManager.Instance.PlayAudio(R.raw.cough);
+              GameSystem.Instance.setIsMissed(true);
           }
     }
 }

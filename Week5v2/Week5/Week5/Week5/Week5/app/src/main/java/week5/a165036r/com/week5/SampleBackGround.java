@@ -42,7 +42,7 @@ public class SampleBackGround implements EntityBase
         offset += _dt*0.1f;
 
         // Week 9
-        xPos -= _dt * 500;
+        xPos -= _dt * 200;
 
         if (xPos < - ScreenWidth){
             xPos = 0;

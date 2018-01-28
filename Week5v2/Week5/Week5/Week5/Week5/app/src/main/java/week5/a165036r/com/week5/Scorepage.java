@@ -9,11 +9,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -44,7 +46,7 @@ import java.util.List;
 
 
 
-public class Scorepage extends Activity implements OnClickListener{
+public class Scorepage extends Activity implements StateBase,OnClickListener{
 
     private Button btn_back;
 
@@ -61,6 +63,31 @@ public class Scorepage extends Activity implements OnClickListener{
     ProfilePictureView profile_pic;
 
     List<String> PERMISSIONS = Arrays.asList("publish_actions");
+
+    @Override
+    public String GetName() {
+        return "ScorePage";
+    }
+
+    @Override
+    public void OnEnter(SurfaceView _view) {
+
+    }
+
+    @Override
+    public void OnExit() {
+
+    }
+
+    @Override
+    public void Render(Canvas _canvas) {
+
+    }
+
+    @Override
+    public void Update(float _dt) {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

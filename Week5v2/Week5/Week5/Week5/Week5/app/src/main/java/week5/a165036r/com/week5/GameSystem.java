@@ -14,6 +14,7 @@ public class GameSystem
 
     float Timer = 0.0f;
     boolean pause  = false;
+    boolean missed  = false;
     private GameSystem()
     {
 
@@ -27,6 +28,16 @@ public class GameSystem
     public void setIsPaused(boolean _pause)
     {
        pause = _pause;
+    }
+
+    public boolean getMissed()
+    {
+        return missed;
+    }
+
+    public void setIsMissed(boolean _missed)
+    {
+        missed = _missed;
     }
 
     public void init(SurfaceView _view)
