@@ -21,13 +21,12 @@ public class MainGameState implements StateBase
     public void OnEnter(SurfaceView _view)
     {
         EntityManager.Instance.init(_view);
-        TouchManager.Instance.init();
         SampleBackGround.Create();
 
         SamplePauseButton.Create();
         Trash1.Create();
-       // trash2.Create();
-       // Trash3.Create();
+        trash2.Create();
+        Trash3.Create();
         binPlastic.Create();
         AudioManager.Instance.PlayAudio((R.raw.fliesbuzzing));
     }
@@ -66,18 +65,6 @@ public class MainGameState implements StateBase
             }
             EntityManager.Instance.Update(_dt);
 
-            if( TouchManager.Instance.IsDown() && TouchManager.Instance.touchCount == 0 && !TouchManager.Instance.objectAttached)
-            {
-                //System.out.println("hit");
-                TouchManager.Instance.touchCount = 1;
-                TouchManager.Instance.goForward = true;
-                TouchManager.Instance.isChanging = true;
-            }
-
-            else if(TouchManager.Instance.isUp() && TouchManager.Instance.touchCount == 1)
-            {
-                TouchManager.Instance.touchCount = 0;
-            }
 
 
         }

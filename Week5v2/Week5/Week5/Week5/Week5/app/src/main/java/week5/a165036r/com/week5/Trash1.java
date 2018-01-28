@@ -27,6 +27,11 @@ public class Trash1 implements EntityBase , Collidable
     private Vibrator _vibrator;
     private int uiPos = 1;
     private float speed = 3;
+    private boolean moveForward = false;
+    private boolean moveBack = false;
+    private boolean isChanging = false;
+    private Vector3[] ui = new Vector3[3];
+    private int touchCount = 0;
 
 
     @Override
@@ -43,15 +48,25 @@ public class Trash1 implements EntityBase , Collidable
     @Override
     public void Init(SurfaceView _view) {
 
+        for(int i = 0; i< 3; ++i)
+        {
+            ui[i] = new Vector3();
+        }
+
+        ui[0].set(220,1550,0);
+        ui[1].set(500,1000,0);
+        ui[2].set(900,1550,0);
+
+
+
+
         scaleX = scaleY = 1;
         bmp = ResourceManager.Instance.GetBitmap(R.drawable.plastic_bottle2);
         ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
-        Pos.x = 500;
-        Pos.y = 1000;
-        Pos.set(TouchManager.Instance.Place[uiPos].x,TouchManager.Instance.Place[uiPos].y,0);
+       uiPos = 1;
+        Pos.set(ui[uiPos]);
         gravity =100.f;
 
-        TouchManager.Instance.objectAttached = false;
 
         //If user click on object, object dies
         _vibrator = (Vibrator)_view.getContext().getSystemService (_view.getContext().VIBRATOR_SERVICE);
@@ -71,37 +86,51 @@ public class Trash1 implements EntityBase , Collidable
     @Override
     public void Update(float _dt) {
 
-        if(TouchManager.Instance.isChanging)
+        if(isChanging)
         {
             Vector3 Target = new Vector3(0,0,0);
-            if(TouchManager.Instance.goForward) {
+            if(moveForward) {
 
                 if (uiPos == 2) {
 
                     uiPos = 0;
-                    TouchManager.Instance.goForward = false;
+                    moveForward = false;
                 }
                 else
                 {
                     uiPos++;
-                    TouchManager.Instance.goForward = false;
+                    moveForward = false;
+                }
+
+            }
+
+            else if(moveBack) {
+
+                if (uiPos == 0) {
+
+                    uiPos = 2;
+                    moveBack = false;
+                }
+                else
+                {
+                    uiPos--;
+                    moveBack = false;
                 }
 
             }
             System.out.println(uiPos);
 
-            Target.x = TouchManager.Instance.Place[uiPos].x - Pos.x;
-            Target.y = TouchManager.Instance.Place[uiPos].y - Pos.y;
+            Target.x = ui[uiPos].x - Pos.x;
+            Target.y = ui[uiPos].y - Pos.y;
 
 
             Pos.x += Target.x * _dt * 3;
             Pos.y += Target.y * _dt * 3;
 
            // System.out.println(Pos.distance2(TouchManager.Instance.Place[uiPos]));
-            if(Pos.distance2(TouchManager.Instance.Place[uiPos])/10 < 100)
+            if(Pos.distance2(ui[uiPos])/10 < 100)
             {
-
-                TouchManager.Instance.isChanging = false;
+                isChanging = false;
             }
         }
 
@@ -120,7 +149,7 @@ public class Trash1 implements EntityBase , Collidable
         {
             //Check Collision
             float imageRadius = bmp.getHeight() * 0.5f;
-            if(Collision.SpheretoSphere(TouchManager.Instance.GetPosX(),TouchManager.Instance.GetPosY(),0.0f,Pos.x,Pos.y,imageRadius))
+            if(Collision.SpheretoSphere(TouchManager.Instance.GetPosX(),TouchManager.Instance.GetPosY(),0.0f,Pos.x,Pos.y,imageRadius) && uiPos == 1)
             {
                 //Pos.x = TouchManager.Instance.GetPosX();
 
@@ -132,6 +161,23 @@ public class Trash1 implements EntityBase , Collidable
             }
 
         }
+
+         if(TouchManager.Instance.IsDown() && touchCount == 0 && !isChanging && !TouchManager.Instance.objectAttached&& TouchManager.Instance.GetPosX()> 800)
+        {
+            isChanging = true;
+            moveForward = true;
+            touchCount = 1;
+        }
+
+        else if(TouchManager.Instance.IsDown() && touchCount == 0 && !isChanging && !TouchManager.Instance.objectAttached&& TouchManager.Instance.GetPosX()< 300)
+         {
+             isChanging = true;
+             moveBack = true;
+             touchCount = 1;
+         }
+
+        if(TouchManager.Instance.isUp() && touchCount ==1)
+            touchCount = 0;
 
         if(Vel.x !=0 || Vel.y!=0 )
         {
@@ -171,14 +217,13 @@ public class Trash1 implements EntityBase , Collidable
 
         if(Pos.x <=0 || Pos.y > 2000 || Pos.x < 40 || Pos.y < -100)
         {
-            Pos.set( TouchManager.Instance.Place[uiPos].x, TouchManager.Instance.Place[uiPos].y,0);
+            Pos.set(ui[uiPos]);
             Vel.set(0,0,0);
             scaleX = 1;
             scaleY = 1;
             ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
             TouchManager.Instance.objectAttached = false;
             released = false;
-            TouchManager.Instance.objectAttached = false;
         }
     }
 
@@ -233,14 +278,13 @@ public class Trash1 implements EntityBase , Collidable
     public void OnHit(Collidable _other) {
           if(_other.GetType() == "binPlastic" && scaleX <= 0.7f ) {
               //TouchManager.Instance.objectAttached = false;
-              Pos.set( TouchManager.Instance.Place[uiPos].x, TouchManager.Instance.Place[uiPos].y,0);
+              Pos.set(ui[uiPos]);
               Vel.set(0,0,0);
               scaleX = 1;
               scaleY = 1;
               ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
               TouchManager.Instance.objectAttached = false;
               released = false;
-              TouchManager.Instance.objectAttached = false;
               System.out.println("hit");
              // setIsDone(true);
 

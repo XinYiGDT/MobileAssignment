@@ -6,7 +6,7 @@ public class TouchManager
 {
 
     public final static TouchManager Instance = new TouchManager();
-    public Vector3[] Place = new Vector3[3];
+
 
     private TouchManager()
     {
@@ -21,9 +21,6 @@ public class TouchManager
     private TouchState status = TouchState.NONE;
     private int posX,posY;
     public boolean objectAttached = false;
-    public boolean isChanging = false;
-    public boolean goback = false;
-    public boolean goForward = false;
     public int touchCount = 0;
 
     public boolean HasTouch()
@@ -76,18 +73,6 @@ public class TouchManager
     }
 
 
-    public void init()
-    {
-
-        for(int i =0; i < 3; ++i)
-        {
-            Place[i] = new Vector3();
-        }
-
-        Place[0].set(220,1550,0);
-        Place[1].set(500,1000,0);
-        Place[2].set(900,1550,0);
-    }
 
 
 }
