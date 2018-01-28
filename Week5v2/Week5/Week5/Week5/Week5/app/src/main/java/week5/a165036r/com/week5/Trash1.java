@@ -118,14 +118,14 @@ public class Trash1 implements EntityBase , Collidable
                 }
 
             }
-            System.out.println(uiPos);
+
 
             Target.x = ui[uiPos].x - Pos.x;
             Target.y = ui[uiPos].y - Pos.y;
 
 
-            Pos.x += Target.x * _dt * 3;
-            Pos.y += Target.y * _dt * 3;
+            Pos.x += Target.x * _dt * 6;
+            Pos.y += Target.y * _dt * 6;
 
            // System.out.println(Pos.distance2(TouchManager.Instance.Place[uiPos]));
             if(Pos.distance2(ui[uiPos])/10 < 100)
@@ -215,7 +215,7 @@ public class Trash1 implements EntityBase , Collidable
             isTouched = false;
         }
 
-        if(Pos.x <=0 || Pos.y > 2000 || Pos.x < 40 || Pos.y < -100)
+        if(Pos.x <=0 || Pos.y > 2000 || Pos.x < 40 )
         {
             Pos.set(ui[uiPos]);
             Vel.set(0,0,0);
@@ -284,6 +284,7 @@ public class Trash1 implements EntityBase , Collidable
               scaleY = 1;
               ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
               TouchManager.Instance.objectAttached = false;
+              TouchManager.Instance.isHit = true;
               released = false;
               System.out.println("hit");
              // setIsDone(true);

@@ -16,7 +16,7 @@ public class binCan implements EntityBase , Collidable
     private Sprite spritesheet = null;
     public Vector3 Pos = new Vector3();
     public Vector3 Vel = new Vector3();
-
+    private Boolean correctHit = false;
 
     @Override
     public boolean IsDone()
@@ -34,7 +34,7 @@ public class binCan implements EntityBase , Collidable
     @Override
     public void Init(SurfaceView _view)
     {
-        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin01_anim);
+        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin01);
         lifeTime = 8.0f;
         Random ranGen = new Random();
 
@@ -63,21 +63,36 @@ public class binCan implements EntityBase , Collidable
     @Override
     public void Update(float _dt)
     {
+
+
+
+        if(correctHit)
+        {
+            yPos -= 150 *_dt;
+        }
+
+        else
+        {
+            xPos += xDir*_dt*movementSpeed;
+            spritesheet.Update(_dt);
+            yPos +=yDir*_dt;
+        }
+
         lifeTime -=_dt;
         if(lifeTime <=0.0f)
         {
+
             setIsDone(true);
         }
-        xPos += xDir*_dt*movementSpeed;
-
-        spritesheet.Update(_dt);
 
     }
 
     @Override
     public void Render(Canvas _canvas)
     {
-        //_canvas.drawBitmap(bmp,xPos-bmp.getWidth()*0.5f,yPos-bmp.getHeight()*0.5f,null);
+        if(correctHit)
+        _canvas.drawBitmap(bmp,xPos-bmp.getWidth()*0.5f,yPos-bmp.getHeight()*0.5f,null);
+        else
         spritesheet.Render(_canvas, (int)xPos, (int)yPos);
     }
 
@@ -127,10 +142,11 @@ public class binCan implements EntityBase , Collidable
     @Override
     public void OnHit(Collidable _other)
     {
-        //if(_other.GetType()=="SampleEntity")
-        //{
-       //     SetIsDone(true);
-       // }
+        if(_other.GetType()=="Trash3" && TouchManager.Instance.isHit)
+        {
+            correctHit = true;
+            TouchManager.Instance.isHit = false;
+        }
     }
 }
 

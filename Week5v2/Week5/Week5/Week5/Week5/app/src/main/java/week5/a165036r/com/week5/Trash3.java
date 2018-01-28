@@ -117,16 +117,15 @@ public class Trash3 implements EntityBase , Collidable
                 }
 
             }
-            System.out.println(uiPos);
 
             Target.x = ui[uiPos].x - Pos.x;
             Target.y = ui[uiPos].y - Pos.y;
 
 
-            Pos.x += Target.x * _dt * 3;
-            Pos.y += Target.y * _dt * 3;
+            Pos.x += Target.x * _dt * 6;
+            Pos.y += Target.y * _dt * 6;
 
-            // System.out.println(Pos.distance2(TouchManager.Instance.Place[uiPos]));
+
             if(Pos.distance2(ui[uiPos])/10 < 100)
             {
                 isChanging = false;
@@ -194,8 +193,7 @@ public class Trash3 implements EntityBase , Collidable
 
             ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
 
-            // System.out.println(Vel.y);
-            //System.out.println( scaleX);
+
 
         }
 
@@ -214,7 +212,7 @@ public class Trash3 implements EntityBase , Collidable
             isTouched = false;
         }
 
-        if(Pos.x <=0 || Pos.y > 2000 || Pos.x < 40 || Pos.y < -100)
+        if(Pos.x <=0 || Pos.y > 2000 || Pos.x < 40 )
         {
             Pos.set(ui[uiPos]);
             Vel.set(0,0,0);
@@ -257,7 +255,7 @@ public class Trash3 implements EntityBase , Collidable
 
     @Override
     public String GetType() {
-        return "Trash1";
+        return "Trash3";
     }
 
     @Override
@@ -283,8 +281,8 @@ public class Trash3 implements EntityBase , Collidable
             scaleY = 1;
             ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
             TouchManager.Instance.objectAttached = false;
+            TouchManager.Instance.isHit = true;
             released = false;
-            System.out.println("hit");
             // setIsDone(true);
 
             //add score

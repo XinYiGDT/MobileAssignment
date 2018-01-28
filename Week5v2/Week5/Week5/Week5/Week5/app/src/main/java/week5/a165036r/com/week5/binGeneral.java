@@ -3,6 +3,7 @@ package week5.a165036r.com.week5;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.view.SurfaceView;
 
 import java.util.Random;
@@ -13,7 +14,8 @@ public class binGeneral implements EntityBase, Collidable
     private boolean isDone = false;
     private float xPos,yPos,xDir,yDir,lifeTime, movementSpeed, ranPos;
     private Sprite spritesheet = null;
-
+    private Boolean correctHit = false;
+    private float rotate = 180.f;
     @Override
     public boolean IsDone()
     {
@@ -28,7 +30,7 @@ public class binGeneral implements EntityBase, Collidable
     @Override
     public void Init(SurfaceView _view)
     {
-        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin03_anim);
+        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin03);
         lifeTime = 8.0f;
         Random ranGen = new Random();
 
@@ -39,7 +41,7 @@ public class binGeneral implements EntityBase, Collidable
         // xDir = -1.f;//ranGen.nextFloat()*-1.0f+1.0f;//ranGen.nextFloat()*100.0f - 50.0f;
         yPos = 700.f;
         yDir = 0;
-
+        //xPos = 550;
         if(ranPos ==1)
         {
             xPos = 10.f;
@@ -58,15 +60,26 @@ public class binGeneral implements EntityBase, Collidable
     @Override
     public void Update(float _dt)
     {
-        lifeTime -=_dt;
-        if(lifeTime <=0.0f)
-        {
 
-            setIsDone(true);
+        if(correctHit)
+        {
+            yPos -= 150 *_dt;
         }
 
-        xPos += xDir*_dt*movementSpeed;
-        spritesheet.Update(_dt);
+        else
+        {
+            lifeTime -=_dt;
+            if(lifeTime <=0.0f)
+            {
+
+                setIsDone(true);
+            }
+
+            xPos += xDir*_dt*movementSpeed;
+            spritesheet.Update(_dt);
+        }
+
+
         //yPos +=yDir*_dt;
 
         //if user click on the object, remove the object (it dies)
@@ -86,7 +99,15 @@ public class binGeneral implements EntityBase, Collidable
     public void Render(Canvas _canvas)
     {
        // _canvas.drawBitmap(bmp,xPos-bmp.getWidth()*0.5f,yPos-bmp.getHeight()*0.5f,null);
-        spritesheet.Render(_canvas, (int)xPos, (int)yPos);
+
+        if(correctHit)
+        {
+            _canvas.drawBitmap(bmp,xPos-bmp.getWidth()*0.5f,yPos-bmp.getHeight()*0.5f,null);
+        }
+        else
+        {
+            spritesheet.Render(_canvas, (int)xPos, (int)yPos);
+        }
     }
 
     @Override
@@ -135,10 +156,11 @@ public class binGeneral implements EntityBase, Collidable
     @Override
     public void OnHit(Collidable _other)
     {
-        //if(_other.GetType()=="SampleEntity")
-        //{
-        //     SetIsDone(true);
-        // }
+        if(_other.GetType()=="Trash2" && TouchManager.Instance.isHit)
+        {
+            correctHit = true;
+            TouchManager.Instance.isHit = false;
+        }
     }
 }
 

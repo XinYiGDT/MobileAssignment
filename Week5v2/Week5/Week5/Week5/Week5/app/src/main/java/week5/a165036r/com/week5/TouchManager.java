@@ -22,6 +22,7 @@ public class TouchManager
     private int posX,posY;
     public boolean objectAttached = false;
     public int touchCount = 0;
+    public boolean isHit = false;
 
     public boolean HasTouch()
     {

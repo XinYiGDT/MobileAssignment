@@ -27,7 +27,7 @@ public class MainGameState implements StateBase
         Trash1.Create();
         trash2.Create();
         Trash3.Create();
-        binPlastic.Create();
+        //binPlastic.Create();
         AudioManager.Instance.PlayAudio((R.raw.fliesbuzzing));
     }
 
@@ -58,7 +58,7 @@ public class MainGameState implements StateBase
                 //timer = 0.0f;
             } else if (Timer > 18.0f && binGeneralOnce) {
                 //SampleEntity.Create();
-               // binGeneral.Create();
+                binGeneral.Create();
                 binGeneralOnce = false;
                 binCanOnce = true;
                 Timer = 0.0f;

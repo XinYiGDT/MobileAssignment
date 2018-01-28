@@ -14,6 +14,7 @@ public class binPlastic implements EntityBase, Collidable
     private boolean isDone = false;
     private float xPos,yPos,xDir,yDir,lifeTime, movementSpeed, ranPos;
     private Sprite spritesheet = null;
+    private Boolean correctHit = false;
 
     @Override
     public boolean IsDone()
@@ -31,7 +32,7 @@ public class binPlastic implements EntityBase, Collidable
     @Override
     public void Init(SurfaceView _view)
     {
-        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin02_anim);
+        bmp = BitmapFactory.decodeResource(_view.getResources(),R.drawable.bin02);
         lifeTime = 8.0f;
         Random ranGen = new Random();
         spritesheet = new Sprite(ResourceManager.Instance.GetBitmap(R.drawable.bin02_anim), 1, 4, 5);
@@ -44,16 +45,16 @@ public class binPlastic implements EntityBase, Collidable
 
         xPos = 550;
 
-//        if(ranPos ==1)
-//        {
-//            xPos = 10.f;
-//            xDir = 1.0f;
-//        }
-//        else
-//        {
-//            xPos = 1000.f;
-//            xDir = -1.0f;
-//        }
+        if(ranPos ==1)
+        {
+            xPos = 10.f;
+            xDir = 1.0f;
+        }
+        else
+        {
+            xPos = 1000.f;
+            xDir = -1.0f;
+        }
 
 
         movementSpeed =150.f;
@@ -62,16 +63,28 @@ public class binPlastic implements EntityBase, Collidable
     @Override
     public void Update(float _dt)
     {
+
+
+        if(correctHit)
+        {
+            yPos -= 150 *_dt;
+        }
+
+        else
+        {
+            xPos += xDir*_dt*movementSpeed;
+            spritesheet.Update(_dt);
+            yPos +=yDir*_dt;
+        }
+
         lifeTime -=_dt;
-//        if(lifeTime <=0.0f)
-//        {
-//
-//            setIsDone(true);
-//        }
-//
-//        xPos += xDir*_dt*movementSpeed;
-        //spritesheet.Update(_dt);
-        //yPos +=yDir*_dt;
+        if(lifeTime <=0.0f)
+        {
+
+            setIsDone(true);
+        }
+
+
 
         //if user click on the object, remove the object (it dies)
         //if(android.getTouch.... etc)
@@ -89,8 +102,16 @@ public class binPlastic implements EntityBase, Collidable
     @Override
     public void Render(Canvas _canvas)
     {
-        //_canvas.drawBitmap(bmp,xPos-bmp.getWidth()*0.5f,yPos-bmp.getHeight()*0.5f,null);
+        if(correctHit)
+        {
+            _canvas.drawBitmap(bmp,xPos-bmp.getWidth()*0.5f,yPos-bmp.getHeight()*0.5f,null);
+        }
+
+
+        else
         spritesheet.Render(_canvas, (int)xPos, (int)yPos);
+
+
     }
 
     @Override
@@ -139,10 +160,11 @@ public class binPlastic implements EntityBase, Collidable
     @Override
     public void OnHit(Collidable _other)
     {
-        //if(_other.GetType()=="SampleEntity")
-        //{
-        //     SetIsDone(true);
-        // }
+        if(_other.GetType()=="Trash1" && TouchManager.Instance.isHit)
+        {
+            correctHit = true;
+            TouchManager.Instance.isHit = false;
+        }
     }
 }
 
