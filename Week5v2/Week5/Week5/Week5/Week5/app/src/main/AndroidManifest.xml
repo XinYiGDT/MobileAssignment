@@ -6,8 +6,7 @@
 
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
-    <meta-data android:name = "com.facebook.sdk.ApplicationId"
-                android:value = '148602315800459' /> // app id from facebook
+
 
     <application
         android:allowBackup="true"
@@ -16,6 +15,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data android:name = "com.facebook.sdk.ApplicationId"
+            android:value = '148602315800459' />
 
         <activity android:name=".MainMenu">
             <intent-filter>
@@ -44,6 +46,14 @@
         </activity>
 
         <activity android:name=".Scorepage">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".Instruction">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

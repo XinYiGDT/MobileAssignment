@@ -18,7 +18,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/textView"/>
+        android:id="@+id/score"/>
 
 
     <Button
@@ -27,7 +27,7 @@
         android:layout_height="140dp"
         android:background="@drawable/btn01"
         android:layout_marginTop="152dp"
-        android:layout_below="@+id/textView"
+        android:layout_below="@+id/score"
         android:layout_alignParentStart="true" />
 
     <Button
@@ -46,5 +46,20 @@
         android:background="@drawable/btn03"
         android:layout_below="@+id/btn_instruction"
         android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/score"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/holo_blue_bright"
+        android:fontFamily="casual"
+        android:text="Sling-a-Trash"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_dark"
+        android:textSize="50sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
 
 </RelativeLayout>

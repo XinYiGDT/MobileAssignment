@@ -29,6 +29,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.Profile;
 import com.facebook.login.LoginManager;
@@ -46,7 +47,7 @@ import java.util.List;
 
 
 
-public class Scorepage extends Activity implements StateBase,OnClickListener{
+public class Scorepage extends Activity implements OnClickListener{
 
     private Button btn_back;
 
@@ -60,50 +61,26 @@ public class Scorepage extends Activity implements StateBase,OnClickListener{
     private CallbackManager callbackManager;
     private LoginManager loginManager;
 
+    TextView HighScore;
+
     ProfilePictureView profile_pic;
 
     List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
     @Override
-    public String GetName() {
-        return "ScorePage";
-    }
-
-    @Override
-    public void OnEnter(SurfaceView _view) {
-
-    }
-
-    @Override
-    public void OnExit() {
-
-    }
-
-    @Override
-    public void Render(Canvas _canvas) {
-
-    }
-
-    @Override
-    public void Update(float _dt) {
-
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
         super.onCreate(savedInstanceState);
-
-        requestWindowFeature(Window.FEATURE_NO_TITLE);// hide title
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //hide top bar
-
         // Initalize for FB
         FacebookSdk.setApplicationId("148602315800459");
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         //AppEventsLogger.activateApp(this);
 
+
         setContentView(R.layout.scorepage);
 
-        highscore =  GameSystem.Instance.GetIntFromSave("Score");
+       // requestWindowFeature(Window.FEATURE_NO_TITLE);// hide title
+        //getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN); //hide top bar
 
         // Define for back button
         btn_back = (Button) findViewById(R.id.btn_back);
@@ -120,19 +97,26 @@ public class Scorepage extends Activity implements StateBase,OnClickListener{
         profile_pic = (ProfilePictureView)findViewById(R.id.picture);
         callbackManager = CallbackManager.Factory.create();
 
+        highscore =  100;//GameSystem.Instance.GetIntFromSave("Score");
+
+        HighScore = (TextView)findViewById(R.id.score);
+
+        if(HighScore != null)
+        {
+            String temp = "HighScore: " + highscore;
+            HighScore.setText(temp);
+        }
+
         AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
 
             @Override
             protected void onCurrentAccessTokenChanged(
                     AccessToken oldAccessToken,
                     AccessToken currentAccessToken) {
-
-                if (currentAccessToken == null){
+                if (currentAccessToken == null) {
                     //User logged out
                     profile_pic.setProfileId("");
-                }
-                else{
-
+                } else {
                     profile_pic.setProfileId(Profile.getCurrentProfile().getId());
                 }
             }
@@ -143,10 +127,33 @@ public class Scorepage extends Activity implements StateBase,OnClickListener{
         loginManager = LoginManager.getInstance();
         loginManager.logInWithPublishPermissions(this, PERMISSIONS);
 
+        AccessTokenTracker accessTokenTracker1 = new AccessTokenTracker() {
+            @Override
+            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+                if(currentAccessToken == null)
+                {
+                    profile_pic.setProfileId("");
+                }
+            }
+        };
+
         loginManager.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            private ProfileTracker profileTracker;
             @Override
             public void onSuccess(LoginResult loginResult) {
-                profile_pic.setProfileId(Profile.getCurrentProfile().getId());
+                if(Profile.getCurrentProfile() == null)
+                {
+                    profile_pic.setProfileId("");
+                    profileTracker = new ProfileTracker() {
+                        @Override
+                        protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+                            profileTracker.stopTracking();
+                            profile_pic.setProfileId(Profile.getCurrentProfile().getId());
+                        }
+                    };
+                }
+                else
+                    profile_pic.setProfileId(Profile.getCurrentProfile().getId());
                 shareScore();
             }
             @Override

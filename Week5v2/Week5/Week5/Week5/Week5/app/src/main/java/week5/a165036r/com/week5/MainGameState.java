@@ -1,5 +1,6 @@
 package week5.a165036r.com.week5;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,11 +9,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceView;
 
-public class MainGameState implements StateBase
+public class MainGameState extends Activity implements StateBase
 {
     //public final static MainGameState Instance = new MainGameState();
     float Timer = 0.0f;
-    float Timer2 = 1.0f;
+    float Timer2 = 2.0f;
     boolean binCanOnce = true;
     boolean binPlasticOnce = true;
     boolean binGeneralOnce = true;
@@ -128,12 +129,18 @@ public class MainGameState implements StateBase
 
             if(Timer2<=0)
             {
-                StateManager.Instance.ChangeState("ScorePage");
+                if(EndGameConfirmDialogFragment.IsShown)
+                    return;
+
+                EndGameConfirmDialogFragment newEndGameConfirm = new EndGameConfirmDialogFragment();
+
+                newEndGameConfirm.show(gamepage.Instance.getFragmentManager(),"EndGameConfirm");
+               // StateManager.Instance.ChangeState("ScorePage");
             }
 
-            EntityManager.Instance.Update(_dt);
+//scoreText =  String.format("Score:%.2fm", score);
 
-           //scoreText =  String.format("Score:%.2fm", score);
+            EntityManager.Instance.Update(_dt);
         }
         else
         {

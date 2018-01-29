@@ -16,7 +16,8 @@ public class MainMenu extends Activity implements View.OnClickListener{
     public final static MainMenu Instance = new MainMenu();
     //Define buttons
     private Button btn_start;
-    private Button btn_credits;
+    private Button btn_ranking;
+    private Button btn_instruction;
     //private final static Bundle Instance = new Bundle();
 
     @Override
@@ -34,6 +35,14 @@ public class MainMenu extends Activity implements View.OnClickListener{
         setContentView(R.layout.mainmenu);
         btn_start  = (Button)findViewById(R.id.btn_start);
         btn_start.setOnClickListener(this);//set Listener to this button ----> start Button
+
+        btn_instruction  = (Button)findViewById(R.id.btn_instruction);
+        btn_instruction.setOnClickListener(this);
+
+        btn_ranking  = (Button)findViewById(R.id.btn_ranking);
+        btn_ranking.setOnClickListener(this);
+
+
     }
 
 //Invoke a callback event in the view
@@ -49,6 +58,16 @@ public class MainMenu extends Activity implements View.OnClickListener{
         {
             GameSystem.Instance.setIsPaused(false);
             intent.setClass(this,gamepage.class);
+        }
+        else if(v == btn_ranking)
+        {
+            GameSystem.Instance.setIsPaused(false);
+            intent.setClass(this,Scorepage.class);
+        }
+        else if(v == btn_instruction)
+        {
+            GameSystem.Instance.setIsPaused(false);
+            intent.setClass(this,Instruction.class);
         }
         startActivity(intent);
     }
