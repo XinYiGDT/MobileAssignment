@@ -10,6 +10,7 @@ import android.view.SurfaceView;
 
 import java.util.Random;
 
+//Did by EdwardFoo
 public class Trash3 implements EntityBase , Collidable
 {
     private Bitmap bmp = null;
@@ -81,6 +82,13 @@ public class Trash3 implements EntityBase , Collidable
             _vibrator.vibrate(pattern, -1);
         }
     }
+
+
+    //Added Veloity, Gravity, Target and Pos for physics gameplay (Slingshot)
+    //ghostPos is added to save initial Position.
+    //isChanging boolean for Switching Trash at left or right of the Screen
+    //Scale is reduced when Trash is being shot to give illusion that the trash i getting further.
+    //Only Collide With the bin when trash is at a certain scale.
 
     @Override
     public void Update(float _dt) {

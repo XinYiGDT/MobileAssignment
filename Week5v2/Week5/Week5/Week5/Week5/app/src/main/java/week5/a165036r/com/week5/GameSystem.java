@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.view.SurfaceView;
 
+
+//Did By Edward Foo.
 public class GameSystem
 {
     public final static GameSystem Instance = new GameSystem();

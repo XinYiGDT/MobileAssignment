@@ -11,6 +11,7 @@ import android.view.SurfaceView;
 import java.lang.annotation.Target;
 import java.util.Random;
 
+//Did By Edward Foo
 public class Trash1 implements EntityBase , Collidable
 {
     private Bitmap bmp = null;
@@ -83,6 +84,13 @@ public class Trash1 implements EntityBase , Collidable
         }
     }
 
+
+    //Added Veloity, Gravity, Target and Pos for physics gameplay (Slingshot)
+    //ghostPos is added to save initial Position.
+    //isChanging boolean for Switching Trash at left or right of the Screen
+    //Scale is reduced when Trash is being shot to give illusion that the trash i getting further.
+    //Only Collide With the bin when trash is at a certain scale.
+
     @Override
     public void Update(float _dt) {
 
@@ -126,8 +134,6 @@ public class Trash1 implements EntityBase , Collidable
 
             Pos.x += Target.x * _dt * 6;
             Pos.y += Target.y * _dt * 6;
-
-           // System.out.println(Pos.distance2(TouchManager.Instance.Place[uiPos]));
             if(Pos.distance2(ui[uiPos])/10 < 100)
             {
                 isChanging = false;
@@ -137,8 +143,6 @@ public class Trash1 implements EntityBase , Collidable
 
         if(isTouched )
         {
-
-           // Pos.x = TouchManager.Instance.GetPosX();
 
             Pos.y = TouchManager.Instance.GetPosY();
 
@@ -151,7 +155,6 @@ public class Trash1 implements EntityBase , Collidable
             float imageRadius = bmp.getHeight() * 0.5f;
             if(Collision.SpheretoSphere(TouchManager.Instance.GetPosX(),TouchManager.Instance.GetPosY(),0.0f,Pos.x,Pos.y,imageRadius) && uiPos == 1)
             {
-                //Pos.x = TouchManager.Instance.GetPosX();
 
                 ghostPos.x = TouchManager.Instance.GetPosX();
                 ghostPos.y = TouchManager.Instance.GetPosY();
@@ -195,8 +198,6 @@ public class Trash1 implements EntityBase , Collidable
 
             ScaledBmp = Bitmap.createScaledBitmap(bmp,(int)(bmp.getWidth()*scaleX),(int)(bmp.getHeight()*scaleY),false);
 
-            // System.out.println(Vel.y);
-            //System.out.println( scaleX);
 
         }
 
@@ -209,7 +210,6 @@ public class Trash1 implements EntityBase , Collidable
                 Vel.x = ghostPos.x - Pos.x;
                 Vel.y = ghostPos.y - Pos.y;
                 released = true;
-                //Vel.y += gravity *_dt *1;
             }
 
             isTouched = false;
@@ -229,8 +229,6 @@ public class Trash1 implements EntityBase , Collidable
 
     @Override
     public void Render(Canvas _canvas) {
-       // _canvas.scale(0.8f,0.8f);
-        //_canvas.drawBitmap(bmp,Pos.x - bmp.getWidth() * 0.4f,Pos.y - bmp.getHeight() * 0.4f,null);
         _canvas.drawBitmap(ScaledBmp,Pos.x - ScaledBmp.getWidth()*0.5f,Pos.y-ScaledBmp.getHeight() *0.5f,null);
     }
 
@@ -287,7 +285,6 @@ public class Trash1 implements EntityBase , Collidable
               TouchManager.Instance.isHit = true;
               released = false;
               System.out.println("hit");
-             // setIsDone(true);
 
               //add score
               int currscore = GameSystem.Instance.GetIntFromSave("CurrScore");

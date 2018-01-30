@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceView;
 
 
-
+//Did by Edward.
 public class SamplePauseButton implements EntityBase
 {
     private Bitmap bmp = null;

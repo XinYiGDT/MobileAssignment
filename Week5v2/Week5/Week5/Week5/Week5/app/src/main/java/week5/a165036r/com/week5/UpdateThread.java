@@ -5,6 +5,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.SurfaceHolder;
 
+//Did by Edward.
+//Terminate Function and run function is modified so that whole game is in a loop.
 public class UpdateThread extends Thread
 {
     static  final  long targetFPS = 60;

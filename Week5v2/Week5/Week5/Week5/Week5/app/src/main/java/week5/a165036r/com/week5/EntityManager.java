@@ -8,6 +8,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+//Did by Edward
+//PauseButton Update function is made so that when game is paused, the button can still be click to unPause.
 public class EntityManager
 {
     public final static EntityManager Instance = new EntityManager();

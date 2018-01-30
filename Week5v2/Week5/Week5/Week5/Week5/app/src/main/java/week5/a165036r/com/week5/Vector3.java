@@ -1,5 +1,9 @@
 package week5.a165036r.com.week5;
 
+
+
+//Did by EdwardFoo
+//Vector3 Class is added for physics.
 public final class Vector3
 {
     public float x;

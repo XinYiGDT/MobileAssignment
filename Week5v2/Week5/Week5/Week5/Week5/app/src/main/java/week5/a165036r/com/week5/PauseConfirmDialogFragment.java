@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.content.Intent;
 
+
+//Did By Edward.
 public class PauseConfirmDialogFragment extends DialogFragment
 {
     public static boolean IsShown = false;

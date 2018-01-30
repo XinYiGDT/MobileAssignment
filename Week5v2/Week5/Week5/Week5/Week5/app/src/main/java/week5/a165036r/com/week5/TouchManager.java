@@ -2,6 +2,8 @@ package week5.a165036r.com.week5;
 
 import android.view.MotionEvent;
 
+
+//Did by Edward Foo.
 public class TouchManager
 {
 
@@ -18,6 +20,8 @@ public class TouchManager
         DOWN,
         MOVE
     }
+
+    //Added objectAttached for touch and drag.
     private TouchState status = TouchState.NONE;
     private int posX,posY;
     public boolean objectAttached = false;
