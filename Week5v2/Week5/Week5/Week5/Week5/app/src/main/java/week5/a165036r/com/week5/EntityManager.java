@@ -119,4 +119,11 @@ public class EntityManager
             }
         }
     }
+
+
+    public void Clear()
+    {
+        entityList.clear();
+    }
+
 }

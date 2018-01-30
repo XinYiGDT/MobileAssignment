@@ -1,5 +1,6 @@
 package week5.a165036r.com.week5;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.view.SurfaceHolder;
@@ -41,6 +42,7 @@ public class UpdateThread extends Thread
     public  void terminate()
     {
         isRunning = false;
+       EntityManager.Instance.Clear();
     }
 
     @Override
@@ -93,6 +95,15 @@ public class UpdateThread extends Thread
             catch (InterruptedException e)
             {
                 terminate();
+            }
+
+            if(GameSystem.Instance.leaveGame ==true)
+            {
+                Intent intent = new Intent();
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setClass(view.getContext(),MainMenu.class);
+                terminate();
+                view.getContext().startActivity(intent);
             }
         }
     }

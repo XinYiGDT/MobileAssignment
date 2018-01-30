@@ -14,7 +14,9 @@ public class GameSystem
 
     float Timer = 0.0f;
     boolean pause  = false;
+    boolean leaveGame = false;
     boolean missed  = false;
+    int health =3;
     private GameSystem()
     {
 

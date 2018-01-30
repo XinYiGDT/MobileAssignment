@@ -57,6 +57,7 @@ public class MainMenu extends Activity implements View.OnClickListener{
         if(v == btn_start)
         {
             GameSystem.Instance.setIsPaused(false);
+            GameSystem.Instance.leaveGame = false;
             intent.setClass(this,gamepage.class);
         }
         else if(v == btn_ranking)

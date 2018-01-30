@@ -38,6 +38,7 @@ public class MainGameState extends Activity implements StateBase
     boolean missed = false;
     int missCount = 0;
 
+
     @Override
     public String GetName() {
         return "MainGame";
@@ -48,20 +49,22 @@ public class MainGameState extends Activity implements StateBase
     {
         EntityManager.Instance.init(_view);
         SampleBackGround.Create();
-
+        GameSystem.Instance.leaveGame = false;
         SamplePauseButton.Create();
         Trash1.Create();
         trash2.Create();
         Trash3.Create();
 
         score =  0;
-        posSX = 100;
-        posSY = 130;
+        GameSystem.Instance.health =3;
+        GameSystem.Instance.SetIntInSave("CurrScore", score);
+        posSX = 450;
+        posSY = 1350;
         posBinY = 130;
         posBin1X = 60;
         posBin2X = 170;
         posBin3X = 290;
-
+       // health1 = health2 = health3 = true;
 
         scaleX=scaleY = 0.5f;
 
@@ -80,7 +83,7 @@ public class MainGameState extends Activity implements StateBase
     public void Update(float _dt) {
         Timer += _dt;
 
-        score = GameSystem.Instance.GetIntFromSave("Score");
+        score = GameSystem.Instance.GetIntFromSave("CurrScore");
         missed = GameSystem.Instance.getMissed();
 
         if(!GameSystem.Instance.getIsPaused()) {
@@ -108,6 +111,7 @@ public class MainGameState extends Activity implements StateBase
             if(missed)
             {
                 missCount+=1;
+                GameSystem.Instance.health -=1;
                 GameSystem.Instance.setIsMissed(false);
                 missed = false;
             }
@@ -138,7 +142,7 @@ public class MainGameState extends Activity implements StateBase
                // StateManager.Instance.ChangeState("ScorePage");
             }
 
-//scoreText =  String.format("Score:%.2fm", score);
+            scoreText =  String.format("Score: %d", score);
 
             EntityManager.Instance.Update(_dt);
         }
@@ -150,12 +154,12 @@ public class MainGameState extends Activity implements StateBase
 
     @Override
     public void Render(Canvas _canvas) {
-//        Paint paint = new Paint();
-//        paint.setColor(Color.BLACK);
-//        paint.setTextSize(50);
-//        _canvas.drawText(scoreText, posSX, posSY, paint);
-
         EntityManager.Instance.Render(_canvas);
+
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(50);
+        _canvas.drawText(scoreText, posSX, posSY, paint);
 
         if(health3) {
             _canvas.drawBitmap(ScaledBmp1, posBin1X - ScaledBmp1.getWidth() * 0.5f, posBinY - ScaledBmp1.getHeight() * 0.5f, null);
@@ -172,9 +176,15 @@ public class MainGameState extends Activity implements StateBase
     public void OnExit() {
 
         Timer = 0.0f;
+        Timer2 = 2.0f;
         binCanOnce = true;
         binPlasticOnce = true;
         binGeneralOnce = true;
         pause  = false;
+        //health3 =  health2 = true;
+        missCount = 1;
+       // EntityManager.Instance.Clear();
+       // score = GameSystem.Instance.SetIntInSave("Score",
+       // health1 = false;
     }
 }

@@ -25,6 +25,8 @@ public class EndGameConfirmDialogFragment extends DialogFragment
             @Override
             public void onClick(DialogInterface dialog, int which)
             {
+                GameSystem.Instance.leaveGame= true;
+                StateManager.Instance.ChangeState("Default");
                 getActivity().finish();
                 Intent intent = new Intent(builder.getContext(),MainMenu.class);
                 builder.getContext().startActivity(intent);

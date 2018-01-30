@@ -1,0 +1,17 @@
+TaskList:
+(Edward)
+Physics
+collision
+moving backgorund
+Switch Trash animation
+pause
+return to main menu
+
+(XinYi)
+Bin Movement
+Art assets
+sprite animation
+Facebook share
+Scorepage
+Health
+End Game

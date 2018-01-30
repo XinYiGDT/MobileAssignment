@@ -182,12 +182,12 @@ public class Trash3 implements EntityBase , Collidable
             Vel.y += gravity *_dt *8.f;
             Pos.x += Vel.x *_dt * 6;
             Pos.y += Vel.y *_dt *6;
-            scaleX -= 0.4f*_dt;
-            scaleY -= 0.4f*_dt;
-            if(scaleX <= 0.7f &&scaleY <= 0.7f)
+            scaleX -= 0.6f*_dt;
+            scaleY -= 0.6f*_dt;
+            if(scaleX <= 0.5f &&scaleY <= 0.5f)
             {
 
-                scaleX = scaleY = 0.6f;
+                scaleX = scaleY = 0.5f;
             }
 
 
@@ -273,7 +273,7 @@ public class Trash3 implements EntityBase , Collidable
 
     @Override
     public void OnHit(Collidable _other) {
-        if(_other.GetType() == "binCan" && scaleX <= 0.7f ) {
+        if(_other.GetType() == "binCan" && scaleX <= 0.5f ) {
             //TouchManager.Instance.objectAttached = false;
             Pos.set(ui[uiPos]);
             Vel.set(0,0,0);
@@ -286,7 +286,7 @@ public class Trash3 implements EntityBase , Collidable
             // setIsDone(true);
 
             //add score
-            int currscore = GameSystem.Instance.GetIntFromSave("Score");
+            int currscore = GameSystem.Instance.GetIntFromSave("CurrScore");
             ++currscore;
             GameSystem.Instance.SaveEditBegin();
             GameSystem.Instance.SetIntInSave("Score", currscore);
@@ -296,10 +296,12 @@ public class Trash3 implements EntityBase , Collidable
 
             AudioManager.Instance.PlayAudio(R.raw.eating1);
         }
-        else
+        else if (_other.GetType() == "binPlastic" || _other.GetType() == "binGeneral")
         {
-            AudioManager.Instance.PlayAudio(R.raw.cough);
-            GameSystem.Instance.setIsMissed(true);
+            if(scaleX <= 0.5f) {
+                AudioManager.Instance.PlayAudio(R.raw.cough);
+                GameSystem.Instance.setIsMissed(true);
+            }
         }
     }
 }
