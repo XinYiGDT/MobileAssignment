@@ -7,7 +7,7 @@ import android.graphics.Matrix;
 import android.view.SurfaceView;
 
 import java.util.Random;
-
+//Created by XinYi
 public class binGeneral implements EntityBase, Collidable
 {
     private Bitmap bmp = null;

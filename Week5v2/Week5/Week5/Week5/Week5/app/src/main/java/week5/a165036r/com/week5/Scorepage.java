@@ -46,7 +46,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-
+//Created by XinYi
 public class Scorepage extends Activity implements OnClickListener{
 
     private Button btn_back;

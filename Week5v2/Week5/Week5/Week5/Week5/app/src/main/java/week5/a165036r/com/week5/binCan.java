@@ -6,7 +6,7 @@ import android.graphics.Canvas;
 import android.view.SurfaceView;
 
 import java.util.Random;
-
+//Created by XinYi
 public class binCan implements EntityBase , Collidable
 {
 

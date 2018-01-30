@@ -4,10 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 
-/**
- * Created by Howard_tansiewlan on 1/3/2018.
- */
-
+//Created by XinYi
 public class Sprite
 {
     private int row = 0;

@@ -14,4 +14,4 @@ sprite animation
 Facebook share
 Scorepage
 Health
-End Game
+Audio Manager

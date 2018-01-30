@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceView;
 
+//Created by XinYi
 public class MainGameState extends Activity implements StateBase
 {
     //public final static MainGameState Instance = new MainGameState();

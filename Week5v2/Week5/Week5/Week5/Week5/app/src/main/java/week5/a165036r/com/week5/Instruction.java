@@ -11,7 +11,7 @@ import android.widget.Button;
 /**
  * Created by lim on 1/29/2018.
  */
-
+//Created by XinYi
 public class Instruction extends Activity implements View.OnClickListener{
 
     public final static Instruction Instance = new Instruction();

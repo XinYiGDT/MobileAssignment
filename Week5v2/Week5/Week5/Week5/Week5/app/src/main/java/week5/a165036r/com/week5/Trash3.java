@@ -289,7 +289,7 @@ public class Trash3 implements EntityBase , Collidable
             int currscore = GameSystem.Instance.GetIntFromSave("CurrScore");
             ++currscore;
             GameSystem.Instance.SaveEditBegin();
-            GameSystem.Instance.SetIntInSave("Score", currscore);
+            GameSystem.Instance.SetIntInSave("CurrScore", currscore);
             GameSystem.Instance.SaveEditEnd();
 
             startVibrate();

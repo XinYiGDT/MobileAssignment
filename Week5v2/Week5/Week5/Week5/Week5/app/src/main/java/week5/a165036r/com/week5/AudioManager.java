@@ -6,7 +6,7 @@ import android.view.SurfaceView;
 import java.util.HashMap;
 
 
-
+//Created by XinYi
 public class AudioManager
 {
     // This is our singleton
@@ -15,7 +15,6 @@ public class AudioManager
     private SurfaceView view = null;
     private HashMap<Integer, MediaPlayer> audioMap = new HashMap<Integer, MediaPlayer>();
 
-    // Protect da singleton!!!
     private AudioManager()
     {
     }
@@ -36,12 +35,11 @@ public class AudioManager
             curr.start();
         }
 
-        // We do not have the resource loaded :P
-        // Have to load and put it into our audio map
+
         MediaPlayer newAudio = MediaPlayer.create(view.getContext(), _id);
         audioMap.put(_id, newAudio);
 
-        newAudio.start(); // Just play the audio immediately
+        newAudio.start();
     }
 
     public boolean IsPlaying()

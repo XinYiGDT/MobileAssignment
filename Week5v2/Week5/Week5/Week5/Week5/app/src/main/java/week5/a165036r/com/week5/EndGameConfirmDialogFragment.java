@@ -10,7 +10,7 @@ import android.os.Bundle;
 /**
  * Created by lim on 1/29/2018.
  */
-
+//Created by XinYi
 public class EndGameConfirmDialogFragment extends DialogFragment
 {
     public static boolean IsShown = false;
